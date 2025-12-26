@@ -16,8 +16,8 @@ class ENDOSLAM_baseline(BaselineVSLAMLab):
         default_parameters = {
             'verbose': 1,
             'mode': 'mono',
-            'pretrained_posenet': os.path.join(checkpoints_dir, 'posenet.pth'),
-            'pretrained_dispnet': os.path.join(checkpoints_dir, 'dispnet.pth')
+            'pretrained_posenet': os.path.join(checkpoints_dir, 'exp_pose_model_best.pth.tar'),
+            'pretrained_dispnet': os.path.join(checkpoints_dir, 'dispnet_model_best.pth.tar')
         }
 
         # Initialize the baseline
@@ -43,8 +43,8 @@ class ENDOSLAM_baseline(BaselineVSLAMLab):
         zip_path = os.path.join(checkpoints_dir, "endoslam_weights.zip")
 
         # Check if weights already exist
-        posenet_path = os.path.join(checkpoints_dir, "posenet.pth")
-        dispnet_path = os.path.join(checkpoints_dir, "dispnet.pth")
+        posenet_path = os.path.join(checkpoints_dir, "exp_pose_model_best.pth.tar")
+        dispnet_path = os.path.join(checkpoints_dir, "dispnet_model_best.pth.tar")
 
         if os.path.exists(posenet_path) and os.path.exists(dispnet_path):
             return
@@ -61,6 +61,15 @@ class ENDOSLAM_baseline(BaselineVSLAMLab):
         print_msg(f"\n{SCRIPT_LABEL}", f"Extracting weights to {checkpoints_dir}", 'info')
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(checkpoints_dir)
+
+        # Move files from subfolder to checkpoints_dir (zip extracts to 08-13-00:00/)
+        subfolder = os.path.join(checkpoints_dir, "08-13-00:00")
+        if os.path.isdir(subfolder):
+            for filename in os.listdir(subfolder):
+                src = os.path.join(subfolder, filename)
+                dst = os.path.join(checkpoints_dir, filename)
+                os.rename(src, dst)
+            os.rmdir(subfolder)
 
         # Clean up zip file
         os.remove(zip_path)
