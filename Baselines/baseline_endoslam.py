@@ -1,6 +1,6 @@
 import os.path
-
-from huggingface_hub import hf_hub_download
+import subprocess
+import zipfile
 
 from utilities import print_msg
 from path_constants import VSLAMLAB_BASELINES
@@ -36,19 +36,31 @@ class ENDOSLAM_baseline(BaselineVSLAMLab):
         return (True, 'is installed') if self.is_cloned() else (False, 'not installed (conda package available)')
 
     def endoslam_download_weights(self):
-        """Download pretrained PoseNet and DispNet weights"""
+        """Download pretrained PoseNet and DispNet weights from Dropbox"""
         checkpoints_dir = os.path.join(self.baseline_path, 'checkpoints')
         os.makedirs(checkpoints_dir, exist_ok=True)
 
-        files = [
-            os.path.join(checkpoints_dir, "posenet.pth"),
-            os.path.join(checkpoints_dir, "dispnet.pth")
-        ]
+        zip_path = os.path.join(checkpoints_dir, "endoslam_weights.zip")
 
-        for file in files:
-            file_name = os.path.basename(file)
-            if not os.path.exists(file):
-                print_msg(f"\n{SCRIPT_LABEL}", f"Download weights: {file}", 'info')
-                # Note: Update repo_id to actual HuggingFace repo once weights are uploaded
-                _ = hf_hub_download(repo_id='vslamlab/endoslam_weights', filename=file_name,
-                                    repo_type='model', local_dir=checkpoints_dir)
+        # Check if weights already exist
+        posenet_path = os.path.join(checkpoints_dir, "posenet.pth")
+        dispnet_path = os.path.join(checkpoints_dir, "dispnet.pth")
+
+        if os.path.exists(posenet_path) and os.path.exists(dispnet_path):
+            return
+
+        # Dropbox URL (dl=1 for direct download)
+        dropbox_url = "https://www.dropbox.com/scl/fi/nnpzsv6at0mw84axgwp2f/08-13-00-00.zip?rlkey=n93sfqomi53sb6z99f823h8sy&dl=1"
+
+        print_msg(f"\n{SCRIPT_LABEL}", f"Downloading weights from Dropbox...", 'info')
+
+        # Download using wget
+        subprocess.run(["wget", "-O", zip_path, dropbox_url], check=True)
+
+        # Extract zip file
+        print_msg(f"\n{SCRIPT_LABEL}", f"Extracting weights to {checkpoints_dir}", 'info')
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(checkpoints_dir)
+
+        # Clean up zip file
+        os.remove(zip_path)
