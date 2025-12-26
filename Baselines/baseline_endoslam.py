@@ -16,8 +16,8 @@ class ENDOSLAM_baseline(BaselineVSLAMLab):
         default_parameters = {
             'verbose': 1,
             'mode': 'mono',
-            'pretrained_posenet': os.path.join(checkpoints_dir, 'posenet.pth'),
-            'pretrained_dispnet': os.path.join(checkpoints_dir, 'dispnet.pth')
+            'pretrained_posenet': os.path.join(checkpoints_dir, 'exp_pose_model_best.pth.tar'),
+            'pretrained_dispnet': os.path.join(checkpoints_dir, 'dispnet_model_best.pth.tar')
         }
 
         # Initialize the baseline
@@ -41,14 +41,13 @@ class ENDOSLAM_baseline(BaselineVSLAMLab):
         os.makedirs(checkpoints_dir, exist_ok=True)
 
         files = [
-            os.path.join(checkpoints_dir, "posenet.pth"),
-            os.path.join(checkpoints_dir, "dispnet.pth")
+            os.path.join(checkpoints_dir, "dispnet_model_best.pth.tar"),
+            os.path.join(checkpoints_dir, "exp_pose_model_best.pth.tar")
         ]
 
         for file in files:
             file_name = os.path.basename(file)
             if not os.path.exists(file):
                 print_msg(f"\n{SCRIPT_LABEL}", f"Download weights: {file}", 'info')
-                # Note: Update repo_id to actual HuggingFace repo once weights are uploaded
-                _ = hf_hub_download(repo_id='vslamlab/endoslam_weights', filename=file_name,
+                _ = hf_hub_download(repo_id='kritzikal/endoslam_weights', filename=file_name,
                                     repo_type='model', local_dir=checkpoints_dir)
