@@ -16,6 +16,7 @@ from Baselines.baseline_glomap import GLOMAP_baseline
 from Baselines.baseline_gensfm import GENSFM_baseline_dev
 from Baselines.baseline_mast3r import MAST3R_baseline_dev
 from Baselines.baseline_vggt import VGGT_baseline_dev
+from Baselines.baseline_endoslam import ENDOSLAM_baseline
 
 from Baselines.baseline_orbslam3 import ORBSLAM3_baseline
 from Baselines.baseline_orbslam3 import ORBSLAM3_baseline_dev
@@ -43,6 +44,7 @@ def get_baseline_switcher():
         "gensfm-dev": lambda: GENSFM_baseline_dev(),
         "mast3r-dev": lambda: MAST3R_baseline_dev(),
         "vggt-dev": lambda: VGGT_baseline_dev(),
+        "endoslam": lambda: ENDOSLAM_baseline(),
 
         #Baselines for Visual-Inertial SLAM
         "orbslam3": lambda: ORBSLAM3_baseline(),
