@@ -1,37 +1,29 @@
 # VSLAM-LAB EndoSLAM Settings (Endo-SfMLearner)
+# Based on: https://github.com/CapsuleEndoscope/EndoSLAM
 
-# Dataset preprocessing
-dataset:
-  img_height: 256
-  img_width: 320
-  sequence_length: 3           # Number of source frames for pose estimation
+# Image Settings
+img-height: 256                    # Vertical dimension for images
+img-width: 832                     # Horizontal dimension for images
+no-resize: False                   # Disable image resizing
 
-# DispNet (Depth Estimation)
-dispnet:
-  encoder: "resnet18"
-  num_scales: 4                # Multi-scale depth prediction
-  min_depth: 0.1
-  max_depth: 100.0
+# Model Settings
+resnet-layers: 18                  # ResNet depth: 18 or 50
+num-scales: 1                      # Number of scales for depth prediction
 
-# PoseNet (Ego-motion Estimation)
-posenet:
-  encoder: "resnet18"
-  num_input_frames: 2          # Number of input frames for pose
-  rotation_mode: "euler"       # euler or quaternion
+# Pose Estimation
+rotation-mode: 'euler'             # Rotation format: 'euler' or 'quat'
+sequence-length: 3                 # Sequence length for pose estimation
 
-# Inference
-inference:
-  device: "cuda"
-  use_gt_intrinsics: True      # Use ground truth camera intrinsics
+# Image Extensions
+img-exts: ['png', 'jpg', 'bmp']    # Supported image extensions
 
-# Loss weights (for reference, used during training)
-loss:
-  photometric_weight: 1.0
-  smooth_weight: 0.1
-  geometry_weight: 0.5
+# Loss Weights (reference from training)
+photo-loss-weight: 1.0             # Photometric loss weight
+smooth-loss-weight: 0.1            # Disparity smoothness weight
+geometry-consistency-weight: 0.5   # Depth consistency weight
 
-# Output
-output:
-  save_depth_maps: False
-  depth_format: "png"          # png or npy
-  trajectory_format: "tum"     # tum or kitti
+# Loss Options
+with-ssim: 1                       # Include SSIM loss
+with-mask: 1                       # Mask for moving objects/occlusions
+with-auto-mask: 0                  # Mask for stationary points
+padding-mode: 'zeros'              # Image warping padding: 'zeros' or 'border'
