@@ -29,6 +29,7 @@ glomap = { features = ["glomap", "colmap"], solve-group = "colmap" }
 orbslam3 = { features = ["orbslam3"] }
 okvis2 = { features = ["okvis2"] }
 pycuvslam = { features = ["pycuvslam","cuda126", "py10"] }
+endoslam = { features = ["endoslam"] }
 
 droidslam-dev = { features = ["droidslam-dev", "cuda126", "py11"], solve-group = "cuda126py11" }
 mast3rslam-dev = { features = ["mast3rslam-dev", "cuda126", "py11"], solve-group = "cuda126py11" }
