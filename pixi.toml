@@ -29,7 +29,7 @@ glomap = { features = ["glomap", "colmap"], solve-group = "colmap" }
 orbslam3 = { features = ["orbslam3"] }
 okvis2 = { features = ["okvis2"] }
 pycuvslam = { features = ["pycuvslam","cuda126", "py10"] }
-
+endoslam = { features = ["endoslam"] }
 droidslam-dev = { features = ["droidslam-dev", "cuda126", "py11"], solve-group = "cuda126py11" }
 mast3rslam-dev = { features = ["mast3rslam-dev", "cuda126", "py11"], solve-group = "cuda126py11" }
 dpvo-dev = { features = ["dpvo-dev", "cuda126", "py11", "x11", "opengl"], solve-group = "cuda126py11" }
@@ -146,7 +146,28 @@ execute-stereo = 'vslamlab_droidslam_stereo'
 droidslam = "*"
 lietorch = { version = "*", channel = "fontan" }  
 open3d = ">=0.18.0,<0.19"
-
+########################################################################################################################
+########################################################################################################################
+# endoslam
+[feature.endoslam]
+channels = ["https://prefix.dev/conda-forge"]
+platforms = ["linux-64"]
+[feature.endoslam.system-requirements]
+cuda = "12.0"
+[feature.endoslam.tasks]
+git-clone = 'git clone https://huggingface.co/kritzikal/endoslam Baselines/ENDO-SLAM'
+execute-mono = {cmd = 'python Baselines/extra-files/endoslam/endoslam_execute.py' }
+[feature.droidslam.dependencies]
+pytorch-gpu = "*"
+torchvision = "*"
+numpy = "*"
+scipy = "*"
+pillow = "*"
+opencv = "*"
+matplotlib = "*"
+imageio = "*"
+scikit-image = "*"
+tqdm = "*"
 # ########################################################################################################################
 # ########################################################################################################################
 # mast3rslam 
