@@ -1,31 +1,37 @@
-# VSLAM-LAB EndoSLAM Settings
-# Algorithm: Endo-SfMLearner (Monocular Depth and Pose Estimation for Endoscopy)
+# VSLAM-LAB EndoSLAM Settings (Endo-SfMLearner)
 
-# Model Settings
-model:
-  dispnet_encoder: "resnet18"    # Encoder architecture for DispNet
-  posenet_encoder: "resnet18"    # Encoder architecture for PoseNet
-  img_height: 256                # Input image height
-  img_width: 320                 # Input image width
+# Dataset preprocessing
+dataset:
+  img_height: 256
+  img_width: 320
+  sequence_length: 3           # Number of source frames for pose estimation
 
-# Inference Settings
+# DispNet (Depth Estimation)
+dispnet:
+  encoder: "resnet18"
+  num_scales: 4                # Multi-scale depth prediction
+  min_depth: 0.1
+  max_depth: 100.0
+
+# PoseNet (Ego-motion Estimation)
+posenet:
+  encoder: "resnet18"
+  num_input_frames: 2          # Number of input frames for pose
+  rotation_mode: "euler"       # euler or quaternion
+
+# Inference
 inference:
-  device: "cuda"                 # Device: cuda or cpu
-  batch_size: 1                  # Batch size for inference
+  device: "cuda"
+  use_gt_intrinsics: True      # Use ground truth camera intrinsics
 
-# Depth Estimation Settings
-depth:
-  min_depth: 0.1                 # Minimum depth value (meters)
-  max_depth: 10.0                # Maximum depth value (meters)
-  scale_factor: 1.0              # Depth scale factor
+# Loss weights (for reference, used during training)
+loss:
+  photometric_weight: 1.0
+  smooth_weight: 0.1
+  geometry_weight: 0.5
 
-# Pose Estimation Settings
-pose:
-  sequence_length: 3             # Number of frames for pose estimation
-  rotation_mode: "euler"         # Rotation representation: euler or quat
-
-# Output Settings
+# Output
 output:
-  save_depth: false              # Save depth maps
-  save_poses: true               # Save camera poses
-  output_format: "tum"           # Output format: tum or kitti
+  save_depth_maps: False
+  depth_format: "png"          # png or npy
+  trajectory_format: "tum"     # tum or kitti
