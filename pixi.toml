@@ -885,3 +885,29 @@ libtorch = "*"
 librealsense = "*"
 openmp = "*"
 libgfortran = "3.*"
+
+# ########################################################################################################################
+# ########################################################################################################################
+# endoslam
+[feature.endoslam]
+channels = ["https://prefix.dev/conda-forge"]
+platforms = ["linux-64"]
+
+[feature.endoslam.system-requirements]
+cuda = "12.0"
+
+[feature.endoslam.tasks]
+git-clone = 'git clone https://github.com/CapsuleEndoscope/EndoSLAM Baselines/EndoSLAM'
+execute-mono = { cmd = 'python Baselines/extra-files/endoslam/endoslam_execute.py' }
+
+[feature.endoslam.dependencies]
+pytorch-gpu = "*"
+torchvision = "*"
+numpy = "*"
+scipy = "*"
+pillow = "*"
+opencv = "*"
+matplotlib = "*"
+imageio = "*"
+scikit-image = "*"
+tqdm = "*"
