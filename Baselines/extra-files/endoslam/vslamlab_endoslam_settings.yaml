@@ -1,0 +1,31 @@
+# VSLAM-LAB EndoSLAM Settings
+# Algorithm: Endo-SfMLearner (Monocular Depth and Pose Estimation for Endoscopy)
+
+# Model Settings
+model:
+  dispnet_encoder: "resnet18"    # Encoder architecture for DispNet
+  posenet_encoder: "resnet18"    # Encoder architecture for PoseNet
+  img_height: 256                # Input image height
+  img_width: 320                 # Input image width
+
+# Inference Settings
+inference:
+  device: "cuda"                 # Device: cuda or cpu
+  batch_size: 1                  # Batch size for inference
+
+# Depth Estimation Settings
+depth:
+  min_depth: 0.1                 # Minimum depth value (meters)
+  max_depth: 10.0                # Maximum depth value (meters)
+  scale_factor: 1.0              # Depth scale factor
+
+# Pose Estimation Settings
+pose:
+  sequence_length: 3             # Number of frames for pose estimation
+  rotation_mode: "euler"         # Rotation representation: euler or quat
+
+# Output Settings
+output:
+  save_depth: false              # Save depth maps
+  save_poses: true               # Save camera poses
+  output_format: "tum"           # Output format: tum or kitti
